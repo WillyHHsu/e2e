@@ -19,7 +19,7 @@ class Features(BaseModel):
 			"example": {
 				"sepal_length": 1.2
 				,"sepal_width": 1.1
-				,"petal_length": 2
+				,"petal_length": 2.0
                 ,"petal_width": 2.34
             }}
         
@@ -34,7 +34,7 @@ app = FastAPI(
 async def root():
     return {"I am": "alive"}
 
-@app.post("/predict", response_model=Features)
+@app.post("/predict/", response_model=Features)
 async def ans(predict:Features):
 	"""
 		This function will predict the label
