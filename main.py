@@ -34,16 +34,15 @@ app = FastAPI(
 async def root():
     return {"I am": "alive"}
 
-@app.post("/predict/", response_model=Features)
+@app.post("/predict/")
 async def ans(predict:Features):
 	"""
 		This function will predict the label
 	"""
+
 	pred_label = model.predict([[predict.sepal_length
 		,predict.sepal_width
 		,predict.petal_length
 		,predict.petal_width]])[0]
 	
 	return {'label':pred_label}
-
-
