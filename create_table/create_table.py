@@ -1,31 +1,35 @@
 import boto3
 
 
-def create_movie_table(dynamodb=None):
+def create_table(dynamodb=None):
     if not dynamodb:
         dynamodb = boto3.resource('dynamodb', endpoint_url="http://localhost:8005", region_name='us-west-2')
 
     table = dynamodb.create_table(
-        TableName='Movies',
+        TableName='logs',
         KeySchema=[
             {
-                'AttributeName': 'year',
-                'KeyType': 'HASH'  # Partition key
+                'AttributeName': 'user_id',
+                'KeyType': 'HASH'
             },
             {
-                'AttributeName': 'title',
-                'KeyType': 'RANGE'  # Sort key
-            }
+                'AttributeName': 'value',
+                'KeyType': 'RANGE'
+            },
+
         ],
+
         AttributeDefinitions=[
             {
-                'AttributeName': 'year',
+                'AttributeName': 'user_id',
                 'AttributeType': 'N'
             },
+
             {
-                'AttributeName': 'title',
+                'AttributeName': 'value',
                 'AttributeType': 'S'
             },
+
 
         ],
         ProvisionedThroughput={
@@ -37,5 +41,4 @@ def create_movie_table(dynamodb=None):
 
 
 if __name__ == '__main__':
-    movie_table = create_movie_table()
-    print("Table status:", movie_table.table_status)
+    movie_table = create_table()

@@ -45,4 +45,27 @@ async def ans(predict:Features):
 		,predict.petal_length
 		,predict.petal_width]])[0]
 	
+	"""
+	# para não precisar baixar a imagem docker e configurar, basicamente precisamos logar as saídas para triggar o retreino 
+	
+	import boto3
+	from datetime import datetime
+	import random 
+	 
+	dynamodb = boto3.resource('dynamodb', endpoint_url="http://localhost:8005",region_name='us-west-2')
+	table = dynamodb.Table('logs')
+	
+	response = table.put_item(
+	Item={
+			'user_id': random.randint(0,42)
+			,'value': pred_label
+			,'dtime':datetime.today().strftime("%d-%m-%Y")
+		}
+		)
+	"""
+
 	return {'label':pred_label}
+
+
+if __name__ == "__main__":
+    uvicorn.run(app, host="0.0.0.0", port=8010)
