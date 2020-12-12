@@ -22,19 +22,30 @@ class Features(BaseModel):
 				,"petal_length": 2.0
                 ,"petal_width": 2.34
             }}
-        
+
+
+tags_metadata = [
+    {
+        "name": "default"
+        ,"description": "just the hello world"
+    },
+	{
+		"name":"predict"
+	}
+]
 
 app = FastAPI(
 	title='Inspirational Title'
 	,description='meaningful description'
 	,version='1.0.0'
+	,openapi_tags=tags_metadata
 	)
 
 @app.get("/")
 async def root():
     return {"I am": "alive"}
 
-@app.post("/predict/")
+@app.post("/predict/", tags=['predict'])
 async def ans(predict:Features):
 	"""
 		This function will predict the label
@@ -65,7 +76,3 @@ async def ans(predict:Features):
 	"""
 
 	return {'label':pred_label}
-
-
-if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=8010)
