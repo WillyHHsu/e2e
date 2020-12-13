@@ -1,12 +1,17 @@
-#https://towardsdatascience.com/how-to-build-and-deploy-a-machine-learning-model-with-fastapi-64c505213857
-
 from fastapi import FastAPI
 from pydantic import BaseModel
 
-from sklearn.ensemble import RandomForestClassifier
-import pickle
 
-model=pickle.load(open('small_model/pickle.sav', 'rb'))
+import boto3
+from  datetime import datetime
+import random
+
+from sklearn.ensemble import RandomForestClassifier
+import joblib
+
+
+model = joblib.load('train_pipeline/pickle.sav')
+
 
 class Features(BaseModel):
 	sepal_length: float
@@ -22,6 +27,8 @@ class Features(BaseModel):
 				,"petal_length": 2.0
                 ,"petal_width": 2.34
             }}
+
+
 
 
 tags_metadata = [
@@ -56,23 +63,24 @@ async def ans(predict:Features):
 		,predict.petal_length
 		,predict.petal_width]])[0]
 	
-	"""
-	# para não precisar baixar a imagem docker e configurar, basicamente precisamos logar as saídas para triggar o retreino 
+	try:
+	# para não precisar baixar a imagem docker e configurar, comentei essa parte do código 
+	# O racional do pporquê disso é: basicamente precisamos logar as saídas para triggar o retreino 
 	
-	import boto3
-	from datetime import datetime
-	import random 
 	 
-	dynamodb = boto3.resource('dynamodb', endpoint_url="http://localhost:8005",region_name='us-west-2')
-	table = dynamodb.Table('logs')
+		dynamodb = boto3.resource('dynamodb', endpoint_url="http://localhost:8005",region_name='us-west-2')
+		table = dynamodb.Table('logs')
 	
-	response = table.put_item(
-	Item={
+		response = table.put_item(
+		Item={
 			'user_id': random.randint(0,42)
 			,'value': pred_label
 			,'dtime':datetime.today().strftime("%d-%m-%Y")
-		}
+			}
 		)
-	"""
+
+	except Exception as err:
+		print(err)
+		print('coloquei um docker para rodar dynamo localmente, ele está rodando?:')
 
 	return {'label':pred_label}

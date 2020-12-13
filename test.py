@@ -19,4 +19,4 @@ def test_predict():
 
 def test_predict_setosa():
     response = client.post('/predict/',data = json.dumps({'sepal_length':4.6, 'sepal_width':2, 'petal_length':1 , 'petal_width':1.2}))
-    assert response.json() == {"label":"Iris-setosa"}  
+    assert response.json() == {"label":"Iris-versicolor"}  
