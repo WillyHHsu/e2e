@@ -5,12 +5,15 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import GridSearchCV 
 from sklearn.pipeline import Pipeline
 import boto3
+import os
+
 
 class retrain():
     def __init__(self, data):
         self.x = data[['sepal_length', 'sepal_width', 'petal_length', 'petal_width']]
         self.y = data['species']
         #TODO: colocar a conexão com o db para ter os dados
+        #TODO: como guardar os daods de treino? fazer uma query bem amrrada, ou guardar em outro lugar
         
     def train(self):
         
@@ -68,7 +71,9 @@ class retrain():
     
 if __name__ == '__main__':
 
-    iris =pd.read_csv("iris.csv", header=None)
+    path=os.path.realpath('train_pipeline/iris.csv')
+    iris =pd.read_csv(path, header=None)
+
     iris.columns=['sepal_length','sepal_width','petal_length','petal_width','species']
     
     train = retrain(iris)
