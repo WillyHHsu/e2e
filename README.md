@@ -1,5 +1,4 @@
 # e2e
-[fonte]https://github.com/ifood/ifood-data-ml-engineer-test
 
 Por favor instale o Jupyter notebook e rode o notebook "guia".
 Nesse notebook faço passo a passo e dou uma breve explicada do racional.
